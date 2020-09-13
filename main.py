@@ -12,8 +12,8 @@ def argParsing():
 
     ## Training policy
     parser.add_argument("--numEpoch", type=int, default=2000, help="num of epoch")
-    parser.add_argument("--batchSize", type=int, default=2, help="input batch size")
-    parser.add_argument("--lr", nargs="+", type=float, default=[(2e-3),(1e-3),(1e-3),(2e-3)], help="learing rate : Gen GANG, GANL, SR")
+    parser.add_argument("--batchSize", type=int, default=256, help="input batch size")
+    parser.add_argument("--lr", nargs="+", type=float, default=[(2e-4),(2e-4)], help="learing rate : Gen Dis")
     parser.add_argument("--beta1", type=float, default=0.9, help="beta1 for adam")
     parser.add_argument("--beta2", type=float, default=0.999, help="beta2 for adam")
     parser.add_argument("--manualSeed", type=int, default=1, help="manual seed")
