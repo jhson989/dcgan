@@ -4,6 +4,7 @@ import torch.nn as nn
 from Dataloader import getDataloader
 from utils import saveImage
 
+
 from model.dcgan import Generator, Discriminator
 
 class Model:
@@ -22,8 +23,8 @@ class Model:
     def train(self):
 
         ## Optim
-        self.optimG = optim.Adam(self.netG.parameters(), lr=self.args.lr[0], betas=(self.args.beta1, self.args.beta2))
-        self.optimD = optim.Adam(self.netD.parameters(), lr=self.args.lr[1], betas=(self.args.beta1, self.args.beta2))  
+        self.optimG = optim.Adam(self.netG.parameters(), lr=self.args.lr[0], betas=(self.args.beta1, self.args.beta2), weight_decay=5e-5)
+        self.optimD = optim.Adam(self.netD.parameters(), lr=self.args.lr[1], betas=(self.args.beta1, self.args.beta2), weight_decay=5e-5)  
 
         self.criterion = nn.BCELoss()    
 
@@ -47,9 +48,12 @@ class Model:
                         [face32, face64, face128]
                     )
 
-                gLoss = self.trainG(
-                        [fake32, fake64, fake128]
-                    )
+                if (dLoss[0]+dLoss[3] <= 1.3) and (dLoss[1]+dLoss[4] <= 1.3) and (dLoss[2]+dLoss[5] <= 1.3):
+                    gLoss = self.trainG(
+                            [fake32, fake64, fake128]
+                        )
+                else:
+                    gLoss = [0.0, 0.0, 0.0]
 
                 if i % 1 == 0:
                     self.logger.log("[%3d/%3d]][%5d/%5d] : D32(%.3f = F%.3f + R%.3f) D64(%.3f = F%.3f + R%.3f)  D128(%.3f = F%.3f + R%.3f) G(%.3f, %.3f, %.3f)" 
@@ -93,6 +97,7 @@ class Model:
 
     def trainG(self, fakes):
         self.netG.zero_grad()
+        torch.nn.utils.clip_grad_norm_(self.netD.parameters(), self.args.maxGrad)
 
         gLoss = []
         for fake in fakes:

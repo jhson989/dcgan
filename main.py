@@ -12,17 +12,18 @@ def argParsing():
 
     ## Training policy
     parser.add_argument("--numEpoch", type=int, default=2000, help="num of epoch")
-    parser.add_argument("--batchSize", type=int, default=256, help="input batch size")
-    parser.add_argument("--lr", nargs="+", type=float, default=[(2e-4),(2e-4)], help="learing rate : Gen Dis")
-    parser.add_argument("--beta1", type=float, default=0.9, help="beta1 for adam")
-    parser.add_argument("--beta2", type=float, default=0.999, help="beta2 for adam")
+    parser.add_argument("--batchSize", type=int, default=52, help="input batch size")
+    parser.add_argument("--lr", nargs="+", type=float, default=[(4e-4),(9e-4)], help="learing rate : Gen Dis")
+    parser.add_argument("--beta1", type=float, default=0.5, help="beta1 for adam")
+    parser.add_argument("--beta2", type=float, default=0.500, help="beta2 for adam")
     parser.add_argument("--manualSeed", type=int, default=1, help="manual seed")
+    parser.add_argument("--maxGrad", type=float, default=5.0, help="max Norm of backward gradient")
     ## Environment
     parser.add_argument("--ngpu", type=int, default=1, help="number of gpus")
-    parser.add_argument("--numWorkers", type=int, default=4, help="number of workers for dataloader")
+    parser.add_argument("--numWorkers", type=int, default=5, help="number of workers for dataloader")
     ## Data
     parser.add_argument("--dataPath", type=str, default="./data/", help="path to dataset") 
-    parser.add_argument("--savePath", type=str, default="./result/1/", help="path to save folder") 
+    parser.add_argument("--savePath", type=str, default="./result/5/", help="path to save folder") 
     args = parser.parse_args()
     return args
 

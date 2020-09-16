@@ -58,7 +58,7 @@ class FaceDataset(Dataset):
 ##### Dataloader
 def getDataloader(args):
     faceData = FaceDataset(args.dataPath, args.batchSize)
-    dataloader = DataLoader(faceData, batch_size=args.batchSize, shuffle=args.train, num_workers=args.numWorkers, drop_last=True)
+    dataloader = DataLoader(faceData, batch_size=args.batchSize, shuffle=True, num_workers=args.numWorkers, drop_last=True)
 
     return dataloader
 

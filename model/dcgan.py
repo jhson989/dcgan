@@ -66,10 +66,13 @@ class Out(nn.Module):
             nn.Sigmoid()
         )
         '''
-        self.outSeq = ResSeq(inC, outC, "Sigmoid")
+        self.outSeq1 = ResSeq(inC, inC)
+        self.outSeq2 = ResSeq(inC, outC, "Sigmoid")
 
     def forward(self, x):
-        return self.outSeq(x)
+        x = self.outSeq1(x)
+        x = self.outSeq2(x)
+        return x
 
 
 class Up(nn.Module):
@@ -94,18 +97,18 @@ class Generator(nn.Module):
 
         super(Generator, self).__init__()
         
-        nC = 16
+        nC = 64
 
         self.up1 = Up(100, nC*8, 1, 0) # 4
         self.up2 = Up(nC*8, nC*8) # 8
         self.up3 = Up(nC*8, nC*4) # 16
         self.up4 = Up(nC*4, nC*2) # 32
-        self.up5 = Up(nC*2, nC*1) # 64
-        self.up6 = Up(nC*1, nC*1) # 64
+        self.up5 = Up(nC*2, nC*2) # 64
+        self.up6 = Up(nC*2, nC*2) # 64
 
         self.out32 = Out(nC*2, 3) # 32
-        self.out64 = Out(nC*1, 3) # 64
-        self.out128 = Out(nC*1, 3) # 128
+        self.out64 = Out(nC*2, 3) # 64
+        self.out128 = Out(nC*2, 3) # 128
 
 
     def forward(self, x):
@@ -173,7 +176,7 @@ class Discriminator(nn.Module):
 
         super(Discriminator, self).__init__()
 
-        nC = 16
+        nC = 32
 
         self.down1 = Down(3, nC*1) # 64
         self.down2 = Down(nC*1, nC*2) # 32
